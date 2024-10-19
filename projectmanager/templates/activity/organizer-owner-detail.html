@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load date_th %}
+
+{% block title %}<title>Organizer | Owner | {{organizer.name}}</title>{% endblock %}
+
+
+{% block content %}
+<div class="card">
+  <div class="text-center">
+    <img src="{{organizer.image.url}}" class="rounded-circle img-fluid" 
+    style="padding: 10px; height:250px; object-fit:scale-down;" 
+    alt="{{organizer.name}}">
+  </div>
+    <div class="card-body">
+        <h5 class="card-title">{{organizer.name}}</h5>
+        <p class="card-text border p-2 bg-light rounded">{{organizer.description}}</p>
+        <p class="card-text">เบอร์โทรศัพท์ : {{organizer.phone}}</p>
+        <p class="card-text">email : {{organizer.email}}</p>
+
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Activity</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for activity in activitys %}
+              <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td><a href="{{activity.get_absolute_url}}" class="text-decoration-none">{{activity.title}}</a></td>
+                <td><a href="{{activity.get_absolute_owner_activity_checkin_url}}" class="btn btn-success">Check in</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+    </div>
+</div>
+{% endblock %}

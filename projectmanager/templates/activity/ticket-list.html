@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block title %}<title>Ticket | {{request.user.profile}}</title>{% endblock %}
+
+
+{% block content %}
+
+{% if tickets %}
+<div class="bg-light rounded">
+        <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Activity</th>
+                <th scope="col">รายละเอียด</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{ticket.activity}}</td>
+                        <td>
+                            <a href="{{ticket.get_absolute_url}}" class="btn btn-success">รายละเอียด</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+{% else %}
+    <div class="alert alert-warning mt-3" role="alert">
+        ❌ ไม่พบข้อมูล
+    </div> 
+{% endif %}
+
+{% endblock %}

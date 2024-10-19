@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+{% block title %}<title>Ticket | {{activity.title}} </title>{% endblock %}
+
+
+{% block content %}
+{% if tickets %}
+<div class="bg-light rounded">
+        <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ชือ-สกุล</th>
+                <th scope="col">ห้อง</th>
+                <th scope="col">แผนก</th>
+                <th scope="col">การเช็คอิน</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{ticket.first_name}} {{ticket.last_name}}</td>
+                        <td>{{ticket.room}}</td>
+                        <td>{{ticket.department}}</td>
+                        <td>
+                            {% if ticket.checkin %}
+                                <span class="text-success">เช็คอินเรียบร้อยแล้ว</span>
+                            {% else %}
+                                 <span class="text-danger">ยังไม่เช็คอิน</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+{% else %}
+    <div class="alert alert-warning mt-3" role="alert">
+        ❌ ไม่พบข้อมูล
+    </div> 
+{% endif %}
+
+{% endblock %}
