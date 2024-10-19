@@ -12,7 +12,7 @@ class MyAccountAdapter(DefaultAccountAdapter):
         # print(dir(request))
         # print(request.path)
         if request.path == "/accounts/line/login/callback/":
-            path = "https://liff.line.me/2006304809-k4W7Wdro/profile/"
+            path = "https://liff.line.me/2006388485-NY13dxAd/profile/"
         else:
             path = "/profile"
         return path.format(username=request.user.username)
@@ -21,7 +21,7 @@ class MyAccountAdapter(DefaultAccountAdapter):
         # print(dir(request))
         # print(request.path)
         if request.path == "/accounts/line/login/callback/":
-            path = "https://liff.line.me/2006304809-k4W7Wdro/profile/"
+            path = "https://liff.line.me/2006388485-NY13dxAd/profile/"
         else:
             path = "/profile"
         return path.format(username=request.user.username)
