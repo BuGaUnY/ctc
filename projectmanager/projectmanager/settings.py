@@ -24,19 +24,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+49#s-ax0#@7y8!xh&nc*g5=9+r7&&ks-9c0wwadb=bp!j-1y$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 CSRF_TRUSTED_ORIGINS = [
     'https://frame-dev-test.frame-dev.com',
-    'https://ctc-sats.ngrok.io',
+    'https://ctc-kfeyg2ay7-bugaunys-projects.vercel.app',
     'https://liff.line.me',
 ]
 # Application definition
 
 ALLOWED_HOSTS = [
-    'ctc-sats.ngrok.io', 
-    'localhost', '127.0.0.1', 
-    'http://152.42.255.83/',
+    'ctc-kfeyg2ay7-bugaunys-projects.vercel.app'
 ]
 
 INSTALLED_APPS = [
