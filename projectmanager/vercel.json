@@ -1,21 +1,7 @@
 {
     "rewrites": [
     { "source": "/(.*)", "destination": "/" }
-    ],
-
-    "builds": [
-      {
-        "src": "projectmanager/wsgi.py",
-        "use": "@vercel/python"
-      }
-    ],
-    
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "projectmanager/wsgi.py"
-      }
     ]
-  }
+}
   
   
