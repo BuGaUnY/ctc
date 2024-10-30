@@ -28,13 +28,13 @@ DEBUG = False
 
 CSRF_TRUSTED_ORIGINS = [
     'https://frame-dev-test.frame-dev.com',
-    'https://ctc-kfeyg2ay7-bugaunys-projects.vercel.app',
+    'https://chirawat.pythonanywhere.com',
     'https://liff.line.me',
 ]
 # Application definition
 
 ALLOWED_HOSTS = [
-    'ctc-kfeyg2ay7-bugaunys-projects.vercel.app'
+    'chirawat.pythonanywhere.com'
 ]
 
 INSTALLED_APPS = [
