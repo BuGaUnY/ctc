@@ -199,6 +199,9 @@ AUTHENTICATION_BACKENDS = [
 SOCIALACCOUNT_LOGIN_ON_GET=True
 LOGIN_REDIRECT_URL = '/'
 
+channel_access_token = 'x0tPoO1V1iWyqWauRqLL2Ak/SYuQj0nypxXAOfdxEv+ex6LascdZRFTEj7cv4TdVyAZ33RXhYplohp6l6LMRne8rZaghHKM/stzV/Fw9xwweIMSXoFWYCDyjd5rlDukL9HzGCaQ7kIOaUuhNRxWtWgdB04t89/1O/w1cDnyilFU='
+channel_secret = '31dbb578dd1f499cd4320c443b59af1f'
+
 SOCIALACCOUNT_PROVIDERS = {
     'line': {
             'APP': {

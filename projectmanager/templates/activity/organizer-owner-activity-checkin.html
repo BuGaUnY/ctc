@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
-
 {% block title %}<title>Check in | {{activity}} </title>{% endblock %}
-
 
 {% block content %}
 <div class="card mb-2">
@@ -23,12 +21,17 @@
             <button type="button" class="btn btn-warning" onclick="startScanner()">
                 <i class="fa-solid fa-qrcode"></i> Scan QR Code</button>
         </div>
+        <div class="d-grid gap-2 mt-3">
+            <button type="button" class="btn btn-danger" onclick="stopScanner()">
+                <i class="fa-solid fa-stop"></i> หยุดการสแกน
+            </button>
+        </div>
     </div>
 </div>
 
 <div id="check-in-partials"></div>
 
-<form id="check-in" hx-get="{% url 'ticket-checkin' %}" hx-target="#check-in-partials">
+<form id="check-in" hx-get="{% url 'ticket-checkin' %}" hx-target="#check-in-partials" onsubmit="return handleSubmit(event)">
     <input type="text" name="activity_uid" value="{{activity.uid}}" style="visibility:hidden">
     <input type="text" id="scanCode" name="ticket_uid" style="visibility:hidden">
     <button type="submit" id="clickButton" style="visibility:hidden">submit</button>
@@ -44,54 +47,83 @@
 <video id="qr-reader" style="width:100%;"></video>
 
 <script>
-function startScanner() {
-    const codeReader = new ZXing.BrowserQRCodeReader();
-    console.log('Starting the QR code reader...');
+    let codeReader;
+    let scanning = false; // ตัวแปรควบคุมสถานะการสแกน
+    let lastScannedCode = null; // เก็บ QR Code ที่สแกนล่าสุด
 
-    // Ensure the video element is present in the DOM
-    const videoElement = document.getElementById('qr-reader');
-    
-    if (!videoElement) {
-        console.error("QR reader video element not found.");
-        Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'ไม่พบวิดีโอสำหรับ QR Code',
-            showConfirmButton: true
-        });
-        return;
-    }
+    function startScanner() {
+        if (scanning) return; // ป้องกันการเริ่มต้นซ้ำ
 
-    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+        codeReader = new ZXing.BrowserQRCodeReader();
+        console.log('เริ่มต้นการอ่าน QR Code...');
+        scanning = true;
 
-    codeReader.decodeOnceFromVideoDevice(null, 'qr-reader')
-        .then((result) => {
-            console.log('QR Code scanned:', result.text);
-
-            if (uuidPattern.test(result.text)) {
-                // สร้าง URL พร้อม ticket_uid และ activity_uid
-                document.getElementById("scanCode").value = result.text;
-                document.getElementById("clickButton").click();
-            } else {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'error',
-                    title: 'ข้อมูลที่สแกนไม่ถูกต้อง',
-                    text: 'ข้อมูล QR ไม่ตรงกับรูปแบบ UUID ที่คาดหวัง',
-                    showConfirmButton: true
-                });
-            }
-        })
-        .catch((err) => {
-            console.error("Error scanning QR Code:", err);
+        const videoElement = document.getElementById('qr-reader');
+        
+        if (!videoElement) {
+            console.error("ไม่พบวิดีโอสำหรับ QR Code");
             Swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: 'ไม่สามารถอ่าน QR Code ได้',
-                text: err.message,
+                title: 'ไม่พบวิดีโอสำหรับ QR Code',
                 showConfirmButton: true
             });
+            return;
+        }
+
+        const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+        codeReader.decodeFromVideoDevice(null, 'qr-reader', (result, err) => {
+            if (result && result.text !== lastScannedCode) {
+                lastScannedCode = result.text; // เก็บ QR Code ที่สแกนสำเร็จล่าสุด
+                console.log('QR Code ที่สแกน:', result.text);
+
+                if (uuidPattern.test(result.text)) {
+                    document.getElementById("scanCode").value = result.text;
+                    document.getElementById("clickButton").click();
+
+                    // แสดงข้อความสำเร็จ
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'สแกนสำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    // แสดงข้อความข้อผิดพลาด
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'ข้อมูลที่สแกนไม่ถูกต้อง',
+                        text: 'ข้อมูล QR ไม่ตรงกับรูปแบบ UUID ที่คาดหวัง',
+                        showConfirmButton: true
+                    });
+                }
+            }
+
+            if (err && !(err instanceof ZXing.NotFoundException)) {
+                console.error("ข้อผิดพลาด:", err);
+            }
         });
-}
+    }
+
+    function stopScanner() {
+        if (codeReader && scanning) {
+            codeReader.reset(); // รีเซ็ตการทำงานของ ZXing
+            scanning = false;
+            console.log('หยุดการอ่าน QR Code');
+
+            // ปิดกล้องโดยหยุด MediaStreamTrack
+            const videoElement = document.getElementById('qr-reader');
+            const stream = videoElement.srcObject;
+
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop()); // หยุดกล้อง
+                videoElement.srcObject = null; // ล้างค่า srcObject
+            }
+        }
+    }
 </script>
-{% endblock %}  
+{% endblock %}

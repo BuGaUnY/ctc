@@ -4,6 +4,9 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path('teacher/', views.Teacher.as_view(), name='teacher'),
+    path('activity/add-organizer/', views.AddOrganizerView.as_view(), name='add-organizer'),
+    path('activity/add-activity/', views.AddActivityView.as_view(), name='add-activity'),
+    path('activity/<int:pk>/delete/', views.DeleteActivityView.as_view(), name='activity-delete'),
     path('organizer/', views.OrganizerList.as_view(), name='organizer-list'),
     path('organizer/<int:pk>/', views.OrganizerDetail.as_view(), name='organizer-detail'),
     path('organizer/owner/', views.OrganizerOwnerList.as_view(), name='organizer-owner-list'),
@@ -24,6 +27,7 @@ urlpatterns = [
     path('attendance/bulk_checkin/<int:pk>/', views.bulk_checkin, name='bulk_checkin'),
     path('report/<int:pk>/', views.attendance_report, name='attendance_report'),
     path('report/sum_report/', views.sum_report, name='sum_report'),
+    path('daily-attendance-report/', views.daily_attendance_report, name='daily_attendance_report'),
     path('report/self/', views.self_report, name='self_report'),
     path('report/export/', views.export_to_excel, name='export_to_excel'),
 ]
