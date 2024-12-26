@@ -11,7 +11,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-# Adjust the path if your settings file is not in the root directory
+from projectmanager import settings  # Import settings directly
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'projectmanager.settings')
 
-application = get_wsgi_application()
+application = get_wsgi_application() 

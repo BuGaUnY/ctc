@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
     'ctc-sats.ngrok.io', 
     'localhost', '127.0.0.1', 
     'http://152.42.255.83/',
+    'ctc-j24a.onrender.com',
 ]
 
 INSTALLED_APPS = [
@@ -71,6 +72,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whiteNoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
