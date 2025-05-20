@@ -1,8 +1,11 @@
+
 from django.conf import settings
 from allauth.account.adapter import DefaultAccountAdapter
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 
-class MyAccountAdapter(DefaultAccountAdapter):
+class MyAccountAdapter(DefaultAccountAdapter, SuccessMessageMixin):
+    success_message = 'ล็อกอินเรียบร้อยแล้ว'
     def pre_social_login(self, request, sociallogin):
         user = sociallogin.user
         if user.id and not sociallogin.is_existing:

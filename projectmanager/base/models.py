@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 from projectmanager import settings
@@ -8,6 +9,7 @@ from linebot.exceptions import LineBotApiError
 import uuid
 import logging
 from django.urls import reverse
+from django.core.signing import Signer
 
 # Create your models here.
 logger = logging.getLogger(__name__)
@@ -80,7 +82,10 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
         # Compare fields for changes
-        fields_to_check = ['first_name', 'last_name', 'phone', 'status', 'image']
+        fields_to_check = [
+            field.name for field in Profile._meta.get_fields()
+            if field.concrete and not field.many_to_many and field.name not in ['id', 'user']
+        ]
         changes_detected = False
 
         if original_instance:
@@ -91,10 +96,14 @@ class Profile(models.Model):
                     changes_detected = True
                     break
 
+        signer = Signer()
+        signed_uid = signer.sign(self.user.pk)  # หรือ profile.user.pk ก็ได้
+
         # Send LINE message if changes are detected
         if changes_detected:
-            social_user = SocialAccount.objects.get(user=self.user)
-            flex_message = FlexSendMessage(
+            social_user = SocialAccount.objects.filter(user=self.user).first()
+            if social_user:
+                flex_message = FlexSendMessage(
                 alt_text='ยืนยันโปรไฟล์',
                 contents={
                     "type": "bubble",
@@ -178,7 +187,7 @@ class Profile(models.Model):
                                 "action": {
                                     "type": "uri",
                                     "label": "ตรวจสอบโปรไฟล์",
-                                    "uri": f"https://ctc-sats.ngrok.io/profile/verify/{self.pk}/"
+                                    "uri": f"https://4d57-2403-6200-8831-321-d41a-738f-1fcb-1ed6.ngrok-free.app/auto-login/?uid={signed_uid}&next=/profile/verify/{self.pk}/"
                                 }
                             }
                         ],
@@ -186,4 +195,11 @@ class Profile(models.Model):
                     }
                 }
             )
-            line_bot_api.push_message(social_user.extra_data['sub'], flex_message)
+            # line_bot_api.push_message(social_user.extra_data['sub'], flex_message)
+        try:
+            line_bot_api.push_message(social_user.uid, flex_message)
+        except Exception as e:
+            print(f"LINE Notify Error: {e}")
+        else:
+            print("ไม่มีบัญชี LINE เชื่อมกับผู้ใช้รายนี้ จึงข้ามการส่งข้อความ")
+

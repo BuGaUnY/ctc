@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h3>จัดการข้อมูลนักเรียน นักศึกษา</h3>
+
+<!-- ฟอร์มกรอง -->
+<form method="get">
+    <div class="row">
+        <div class="col-md-4">
+            <label>ห้อง:</label>
+            <select name="room" class="form-control">
+                <option value="">-- ทั้งหมด --</option>
+                {% for r in room_list %}
+                <option value="{{ r }}" {% if r == room %}selected{% endif %}>{{ r }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label>แผนก:</label>
+            <select name="department" class="form-control">
+                <option value="">-- ทั้งหมด --</option>
+                {% for d in department_list %}
+                <option value="{{ d }}" {% if d == department %}selected{% endif %}>{{ d }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary mt-4">ค้นหา</button>
+        </div>
+    </div>
+</form>
+
+
+<!-- เงื่อนไขแสดง formset -->
+{% if show_formset %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>รหัสประจำตัว</th>
+                <th>ชื่อ</th>
+                <th>นามสกุล</th>
+                <th>ห้อง</th>
+                <th>ระดับชั้น</th>
+                <th>แผนก</th>
+                <th>ลบ</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for form in formset %}
+            <tr>
+                {{ form.id }}
+                <td>{{ form.student_number }}</td>
+                <td>{{ form.first_name }}</td>
+                <td>{{ form.last_name }}</td>
+                <td>{{ form.room }}</td>
+                <td>{{ form.degree }}</td>
+                <td>{{ form.department }}</td>
+                <td class="text-center">{{ form.DELETE }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        <button type="submit" class="btn btn-success">บันทึก</button>
+    </div>
+</form>
+{% else %}
+<p style="margin-top: 20px;">กรุณาเลือกห้อง หรือ แผนก เพื่อแสดงข้อมูลนักเรียน/นักศึกษา</p>
+{% endif %}
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 5px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        text-align: center;
+        background-color: #f0f0f0;
+    }
+
+    h3 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}

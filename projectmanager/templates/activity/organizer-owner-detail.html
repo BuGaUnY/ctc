@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load date_th %}
 
@@ -6,9 +7,8 @@
 {% block content %}
 <div class="card">
     <div class="text-center">
-        <img src="{{organizer.image.url}}" class="rounded-circle img-fluid" 
-        style="padding: 10px; height:250px; object-fit:scale-down;" 
-        alt="{{organizer.name}}">
+        <img src="{{organizer.image.url}}" class="rounded-circle img-fluid"
+            style="padding: 10px; height:250px; object-fit:scale-down;" alt="{{organizer.name}}">
     </div>
     <div class="card-body">
         <h5 class="card-title">{{organizer.name}}</h5>
@@ -26,47 +26,50 @@
                     <th scope="col">ชื่อกิจกรรม</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-            {% for activity in activitys %}
+                {% for activity in activitys %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td><a href="{{ activity.get_absolute_url }}" class="text-decoration-none">{{ activity.title }}</a></td>
-                    <td><a href="{{ activity.get_absolute_owner_activity_checkin_url }}" class="btn btn-success">เช็คอิน</a></td>
+                    <td><a href="{{ activity.get_absolute_owner_activity_checkin_url }}"class="btn btn-success">เช็คอิน</a></td>
+                    <td><a href="{% url 'edit_activity' pk=activity.pk %}" class="btn btn-warning">แก้ไขกิจกรรม</a></td>
                     <td>
-                        <!-- Trigger delete modal -->
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ activity.pk }}">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal{{ activity.pk }}">
                             ลบกิจกรรม
                         </button>
-                    </td>
-                </tr>
-
-                <!-- Delete Confirmation Modal -->
-                <div class="modal fade" id="deleteModal{{ activity.pk }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">ลบกิจกรรมพิเศษ</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                คุณต้องการลบกิจกรรมพิเศษ "{{ activity.title }}" หรือไม่?
-                            </div>
-                            <div class="modal-footer">
-                                <form method="post" action="{% url 'activity-delete' activity.pk %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger">ยืนยันการลบกิจกรรมพิเศษ</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                                </form>
+                        <div class="modal fade" id="deleteModal{{ activity.pk }}" tabindex="-1"
+                            aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">ลบกิจกรรมพิเศษ</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        คุณต้องการลบ "{{ activity.title }}" หรือไม่?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form method="post" action="{% url 'activity-delete' activity.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                class="btn btn-danger">ยืนยันการลบกิจกรรมพิเศษ</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">ยกเลิก</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
-
 {% endblock %}

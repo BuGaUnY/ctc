@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load date_th %}
 {% load tz %}
@@ -30,7 +31,11 @@
         
               </p>
     </div>
-    <a href="{% url 'profile-update' %}" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i> แก้ไข</a>
+    {% if profile.status == False %}
+        <a href="{% url 'profile-update' %}" class="btn btn-warning">
+            <i class="fa-regular fa-pen-to-square"></i> แก้ไข
+        </a>
+    {% endif %}
 </div>
  
    <!-- Modal -->

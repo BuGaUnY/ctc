@@ -1,7 +1,7 @@
+
 from django.urls import path
 from . import views
 from django.urls import register_converter, path
-from .views import VerifyProfile
 
 # สร้างตัวแปลงสำหรับ UUID หรือ Integer
 class IntOrUUIDConverter:
@@ -20,9 +20,11 @@ class IntOrUUIDConverter:
 register_converter(IntOrUUIDConverter, 'int_or_uuid')
 
 urlpatterns = [
+    path('auto-login/', views.auto_login_view, name='auto-login'),
     path('profile/', views.ProfileDetail.as_view(), name='profile-detail'),
     path('profile/update/', views.ProfileUpdate.as_view(), name='profile-update'),
     path('profile/verify/<int_or_uuid:pk>/', views.VerifyProfile.as_view(), name='profile-verify'),
-    path('students/search/', views.StudentSearchView.as_view(), name='student-search'),
     path('webhook/', views.line_webhook, name='line_webhook'),
+    path('profiles/bulk-reset/', views.BulkResetProfilesView.as_view(), name='bulk_reset_profiles'),
+    path('profiles/bulk-edit/', views.BulkEditProfilesView.as_view(), name='bulk_edit_profiles'),
 ]

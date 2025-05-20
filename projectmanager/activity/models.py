@@ -176,4 +176,3 @@ class Ticket(models.Model):
     
     def get_absolute_update_url(self):
         return reverse('ticket-update', kwargs={'pk': self.pk})
-    

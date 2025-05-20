@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
 
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
 {% block title %}<title>เพิ่มครูที่ปรึกษา | เจ้าหน้าที่</title>{% endblock %}
@@ -7,6 +7,7 @@
 {% block content %}
 <div class="card-body bg-body-tertiary p-4 rounded">
     <h1 class="mb-2">เพิ่มครูที่ปรึกษา | เจ้าหน้าที่</h1>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}<title>แก้ไขกิจกรรมพิเศษ</title>{% endblock %}
+{% block content %}
+<h2>แก้ไขกิจกรรม</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-user-plus"></i> บันทึก</button>
+    <a href="{% url 'organizer-list' %}" class="btn btn-danger"><i class="fa-solid fa-xmark"></i> ยกเลิก</a>
+</form>
+{% endblock %}

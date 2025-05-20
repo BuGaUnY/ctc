@@ -1,3 +1,4 @@
+
 """
 Django settings for projectmanager project.
 
@@ -28,16 +29,15 @@ DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://frame-dev-test.frame-dev.com',
-    'https://ctc-sats.ngrok.io',
+    'https://4d57-2403-6200-8831-321-d41a-738f-1fcb-1ed6.ngrok-free.app',
     'https://liff.line.me',
 ]
 # Application definition
 
 ALLOWED_HOSTS = [
-    'ctc-sats.ngrok.io', 
     'localhost', '127.0.0.1', 
     'http://152.42.255.83/',
-    'ctc-j24a.onrender.com',
+    '4d57-2403-6200-8831-321-d41a-738f-1fcb-1ed6.ngrok-free.app',
 ]
 
 INSTALLED_APPS = [
@@ -243,3 +243,4 @@ if os.name == 'nt':
     VIRTUAL_ENV_BASE = os.environ['VIRTUAL_ENV']
     os.environ['PATH'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
     os.environ['PROJ_LIB'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
+
